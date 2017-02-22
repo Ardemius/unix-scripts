@@ -1,0 +1,75 @@
+= My Unix scripts
+:toc:
+:toclevels: 3
+:toc-placement!:
+:lb: pass:[<br> +]
+:imagesdir: images
+:icons: font
+:source-highlighter: highlightjs
+
+toc::[]
+
+== link:javaCacheHandler.sh[`javaCacheHandler.sh`]
+
+Handles the Java Cache (list and uninstall applications, display their content). +
+Especially useful for Java Web Start applications.
+
+Usage:
+
+[source,bash]
+----
+Usage: javaCacheHandler OPTION [JNLP_FILE]
+DO NOT FORGET to update the paths in fonction initCommonConstants()
+-j
+    List the jars, and their content, present in the Java cache.
+    Also display the jar real name from the INDEX.LIST if exists.
+-l
+    List the applications stored in the Java cache, with the full path in cache of their associated JNLP file.
+-u JNLP_FILE
+    uninstall the cached application corresponding to the given jnlp file (full path in Java cache needed).
+A common usage is to, first get the JNLP path of your application using \"-l\" option, then uninstall it using \"-u\" option.
+----
+
+== link:manualDeployMaven3Dependencies.sh[`manualDeployMaven3Dependencies.sh`]
+
+Deploy the given artifacts (jars) in the correct Maven 3 REMOTE repo, depending on their name and version.
+
+Usage:
+
+[source,bash]
+----
+${0} -r actifacts_folder
+Deploy the given artifacts (jars) in the correct Maven 3 REMOTE repo.
+Rules:
+ - \"artifacts_folder\" must an absolute, NOT relative, path
+ - Artifacts whose name doesn't start with \"<project prefix>\" go in the Dependencies repo
+ - Repo of other artifacts depends on their version, snapshot or not
+${0} -l actifacts_list_file
+Deploy the given list of artifacts in the correct Maven 3 REMOTE repo.
+Those artifacts MUST BE PRESENT in your maven 1 local repo.
+Rules:
+ - Jars listed in the file must match the pattern:
+   GroupId:ArtifactId:Type:Version
+ - only jars (Type = jar) will be deployed
+ - Artifacts whose GroupId isn't \"project\" go in the Dependencies repo
+ - Repo of other artifacts depends on their version, snapshot or not
+Available repo:
+ - Snapshots repo        : <nexus server URL>/nexus/content/repositories/<project repo for SNAPSHOTS>/
+ - Releases repo         : <nexus server URL>/nexus/content/repositories/<project repo for RELEASES>/
+ - Dependencies repo     : <nexus server URL>/nexus/content/repositories/<project repo for 3rd-party DEPENDENCIES>/
+LOG file created in given \"artifacts_folder\" for option \"-r\", or in the current folder for option \"-l\" 
+----
+
+
+== link:urlValidator.sh[`urlValidator.sh`]
+
+Check if the URL given as a parameter is accessible through a list of proxies.
+
+Usage:
+
+[source,bash]
+----
+Usage: urlProxyChecker URL
+Check if the URL given as a parameter is accessible for each of the given proxies
+This script requires either \"curl\" or \"wget\"
+----
